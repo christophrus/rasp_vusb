@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo rm -r /sys/kernel/config/usb_gadget/g1/configs/c.1/
+sudo rm -r /sys/kernel/config/usb_gadget/gadget1/configs/c.1/
 
 sudo systemctl disable create-triple-usb
 sudo rm /etc/systemd/system/create-triple-usb.service

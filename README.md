@@ -1,18 +1,22 @@
 What is it?
 ================================
-This repo explains how to turn your Raspberry Pi Zero into USB Keyboard and Mouse. Also provides sample code and binaries to control them.
+This repo explains how to turn your Raspberry Pi Zero into USB Keyboard, Mouse and Network adapter (RNDIS). Also provides sample code and binaries to control them.
 
 Steps - Installation
 ================================
 
-1. Flash your SD card with NOOBS (download: https://www.raspberrypi.org/downloads/noobs/) or use your installed Raspbian.
+1. Flash your SD card with Raspbian / Raspberry Pi OS Lite (download: https://www.raspberrypi.org/software/)
 
-2. Make /share directory on your raspberry pi.
+2. Before your first boot follow the instrucations to enable ssh over usb for your Pi Zero: https://desertbot.io/blog/headless-pi-zero-ssh-access-over-usb-windows
+
+3. After your first boot you need to remove the previously added `g_ether` from `/boot/cmdline.txt`
+
+4. Make /share directory on your raspberry pi.
     ```
     $ sudo mkdir -m 1777 /share
     ```
 
-3. Run /script/deploy_with_pscp.bat on your PC to deploy files to Raspberry PI Zero. (download pscp.exe from https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+5. Run /script/deploy_with_pscp.bat on your PC to deploy files to Raspberry PI Zero. (download pscp.exe from https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
     ```
     c:\...\script> deploy_with_pscp.bat [your_raspberrypi_ip]
 
@@ -21,24 +25,29 @@ Steps - Installation
     c:\...\script> deploy_with_pscp.bat 192.168.0.100
     ```
 
-4. On your raspberry pi, make /share/install_usb.sh and /share/rasp_vusb_server.out runnable.
+6. On your raspberry pi, make /share/install_usb.sh and /share/rasp_vusb_server.out runnable.
     ```
     $ sudo chmod +x /share/install_usb.sh
     $ sudo chmod +x /share/rasp_vusb_server.out
     ```
 
-5. Run install_usb.sh
+7. Run install_usb.sh
     ```
+    $ sudo apt-get update
+    $ sudo apt-get install wiringpi 
     $ sudo /share/install_usb.sh
     ```
 
-6. That's all, all of the changes will be applied after reboot.
+8. That's all, all of the changes will be applied after reboot.
     ```
     $ sudo reboot
     ```
 
-7. Finally, connect your Raspberry PI zero to your Computer. Go to your "Control panel" / "Device Manager", you can find 3 new devices.
+9. Finally, connect your Raspberry PI zero to your Computer. Go to your "Control panel" / "Device Manager", you can find 4 new devices.
     ```
+    Network adapters
+        * Remote NDIS Compatible Device
+        
     Human Interface Devices
         * USB Input Device
 
@@ -46,15 +55,14 @@ Steps - Installation
         * HID Keyboard Device
 
     Mice and other pointing devices
-        * HID-compliant mouse  (Absolute position + buttons)
-        * HID-compliant mouse  (Relative position + wheel)
+        * HID-compliant mouse
     ```
 
     You can get the report descriptors at /report_descriptors.txt
 
 How to Test
 ================================
-Now, you can run "InputController.exe (from /bin/v1_0_0_2/InputController.zip)" on your Windows PC. As soon as run, it will find "usb_server" program which is run in Raspberry PI and connect it automatically.
+Now, you can run "InputController.exe (from /bin/v1_0_0_3/InputController.zip)" on your Windows PC. As soon as run, it will find "usb_server" program which is run in Raspberry PI and connect it automatically.
 
 At first, InputController parse input as mouse data. So you can move to specific position as whatever you want but need to calculate for your circumstances. If you move to x = 50, y = 100 and your monitor's resolution is 1920 * 1080, your input has to be like this,
 
